@@ -13,7 +13,7 @@
       "responses": [
         {
           "uuid": "response-percentage",
-          "body": "{\n  \"percentage\": 10.0\n}",
+          "body": "{\n  \"value\": 10.0\n}",
           "statusCode": 200,
           "headers": [
             {

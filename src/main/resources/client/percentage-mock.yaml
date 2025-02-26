@@ -19,6 +19,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  percentage:
+                  value:
                     type: number
                     example: 10.0

@@ -8,11 +8,11 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - ${DB_PORT}
+      - ${DB_PORT}:5432
   redis:
     image: 'redis:7.4'
     ports:
-      - '6379'
+      - '6379:6379'
   mockoon:
     image: 'mockoon/cli:9'
     container_name: mockoon-mock
