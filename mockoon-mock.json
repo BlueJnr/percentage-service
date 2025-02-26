@@ -1,0 +1,28 @@
+{
+  "uuid": "mockoon-env-tenpo",
+  "lastMigration": 29,
+  "name": "Mock API - Tenpo",
+  "port": 3000,
+  "routes": [
+    {
+      "uuid": "route-percentage",
+      "method": "GET",
+      "endpoint": "/external/percentage",
+      "enabled": true,
+      "type": "http",
+      "responses": [
+        {
+          "uuid": "response-percentage",
+          "body": "{\n  \"percentage\": 10.0\n}",
+          "statusCode": 200,
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

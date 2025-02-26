@@ -1,0 +1,92 @@
+openapi: 3.0.1
+info:
+  title: Backend Tenpo API
+  description: API para cálculo con porcentaje dinámico y consulta de historial.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor local
+
+paths:
+  /calculate:
+    post:
+      summary: Calcula un valor con porcentaje dinámico
+      description: Suma dos números y aplica un porcentaje obtenido de un servicio externo.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationRequest'
+      responses:
+        '200':
+          description: Cálculo exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResponse'
+        '429':
+          description: Límite de peticiones excedido
+        '500':
+          description: Error interno del servidor
+
+  /history:
+    get:
+      summary: Consulta el historial de llamadas
+      description: Retorna un listado paginado del historial de llamadas.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Historial obtenido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CallHistory'
+
+components:
+  schemas:
+    CalculationRequest:
+      type: object
+      properties:
+        num1:
+          type: string
+          format: decimal
+          example: "5.00"
+        num2:
+          type: string
+          format: decimal
+          example: "10.00"
+
+    CalculationResponse:
+      type: object
+      properties:
+        result:
+          type: string
+          format: decimal
+        percentage:
+          type: string
+          format: decimal
+
+    CallHistory:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        endpoint:
+          type: string
+        status:
+          type: integer

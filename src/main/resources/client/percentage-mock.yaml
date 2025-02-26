@@ -1,0 +1,24 @@
+openapi: 3.0.1
+info:
+  title: Mock API
+  description: API simulada que retorna un porcentaje fijo.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /external/percentage:
+    get:
+      summary: Obtiene un porcentaje fijo
+      responses:
+        '200':
+          description: Porcentaje obtenido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  percentage:
+                    type: number
+                    example: 10.0
