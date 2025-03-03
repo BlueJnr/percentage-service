@@ -161,6 +161,8 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <excludeDevtools>true</excludeDevtools>
+                    <finalName>ROOT</finalName>
                 </configuration>
             </plugin>
             <plugin>

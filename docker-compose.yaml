@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: 'postgres:16.3-alpine'
+    container_name: postgres-db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME:-percentage}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-percentage}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: 'redis:7.4'
+    container_name: redis-cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  mockoon:
+    image: 'mockoon/cli:9'
+    container_name: mockoon-mock
+    restart: unless-stopped
+    volumes:
+      - ./mockoon-mock.json:/data/mockoon-mock.json
+    command: [ "-d", "/data/mockoon-mock.json" ]
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  percentage:
+    image: bluejnr/percentage-api:0.0.1
+    container_name: percentage
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  postgres_data:
+    driver: local
