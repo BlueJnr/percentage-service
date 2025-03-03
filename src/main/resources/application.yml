@@ -34,6 +34,11 @@ spring:
       port: ${REDIS_PORT:6379}
       password: ''
       timeout: 60000
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
 
 management:
   endpoints:
