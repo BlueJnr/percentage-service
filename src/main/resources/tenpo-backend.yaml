@@ -26,10 +26,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalculationResponse'
-        '429':
-          description: Límite de peticiones excedido
-        '500':
+        '503':
           description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                reason: "SERVICE_UNAVAILABLE"
+                message: "No percentage available in cache and external service failed"
 
   /history:
     get:
@@ -55,6 +60,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CallHistory'
+        '429':
+          description: Límite de peticiones excedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                reason: "TOO_MANY_REQUESTS"
+                message: "Rate limit exceeded. Try again later."
 
 components:
   schemas:
@@ -82,24 +96,28 @@ components:
 
     CallHistory:
       type: object
-      description: "Registro del historial de llamadas a la API"
       properties:
         timestamp:
           type: string
           format: local-date-time
-          description: "Fecha y hora exacta de la llamada"
           example: "2025-03-02T14:00:12"
         endpoint:
           type: string
-          description: "Endpoint que fue llamado"
           example: "/api/calculate"
         requestParams:
           type: string
-          description: "Parámetros recibidos en la solicitud"
         responseData:
           type: string
-          description: "Respuesta enviada por la API"
         status:
           type: integer
           format: int32
-          description: "Código de estado HTTP de la respuesta"
+
+    ErrorResponse:
+      type: object
+      properties:
+        reason:
+          type: string
+          example: "TOO_MANY_REQUESTS"
+        message:
+          type: string
+          example: "Rate limit exceeded. Try again later."

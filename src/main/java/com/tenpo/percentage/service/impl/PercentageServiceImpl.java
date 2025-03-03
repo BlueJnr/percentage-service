@@ -1,7 +1,8 @@
 package com.tenpo.percentage.service.impl;
 
 import com.tenpo.percentage.client.api.DefaultApi;
-import com.tenpo.percentage.config.exception.CacheValueNotFoundException;
+import com.tenpo.percentage.config.errors.enums.ErrorReason;
+import com.tenpo.percentage.config.exception.ApiException;
 import com.tenpo.percentage.service.CacheService;
 import com.tenpo.percentage.service.PercentageService;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -32,7 +33,9 @@ public class PercentageServiceImpl implements PercentageService {
         .getPercentage()
         .orElseThrow(
             () ->
-                new CacheValueNotFoundException(
-                    "No percentage available in cache and external service failed"));
+                ApiException.builder()
+                    .reason(ErrorReason.SERVICE_UNAVAILABLE)
+                    .message("No percentage available in cache and external service failed")
+                    .build());
   }
 }

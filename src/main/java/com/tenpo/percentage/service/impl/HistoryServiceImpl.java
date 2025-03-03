@@ -1,9 +1,12 @@
 package com.tenpo.percentage.service.impl;
 
+import com.tenpo.percentage.config.errors.enums.ErrorReason;
+import com.tenpo.percentage.config.exception.ApiException;
 import com.tenpo.percentage.model.CallHistory;
 import com.tenpo.percentage.model.CallHistoryEntity;
 import com.tenpo.percentage.respository.CallHistoryRepository;
 import com.tenpo.percentage.service.HistoryService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -32,6 +35,9 @@ public class HistoryServiceImpl implements HistoryService {
   }
 
   @Override
+  @RateLimiter(
+      name = "historyServiceRateLimiter",
+      fallbackMethod = "historyServiceRateLimitFallback")
   public List<CallHistory> getCallHistory(Integer page, Integer size) {
     return callHistoryRepository
         .findAll(PageRequest.of(page, size))
@@ -48,5 +54,13 @@ public class HistoryServiceImpl implements HistoryService {
               return callHistory;
             })
         .toList();
+  }
+
+  public List<CallHistory> historyServiceRateLimitFallback(
+      Integer page, Integer size, Exception ex) {
+    throw ApiException.builder()
+        .message("Rate limit exceeded. Try again later.")
+        .reason(ErrorReason.TOO_MANY_REQUESTS)
+        .build();
   }
 }

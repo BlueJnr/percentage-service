@@ -65,3 +65,10 @@ resilience4j:
           - org.springframework.web.client.ResourceAccessException
           - java.net.ConnectException
           - java.io.IOException
+
+  ratelimiter:
+    instances:
+      historyServiceRateLimiter:
+        limitForPeriod: 3
+        limitRefreshPeriod: 1m
+        timeoutDuration: 0
