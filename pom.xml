@@ -60,6 +60,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 
 
         <dependency>
@@ -181,6 +185,7 @@
                             <configOptions>
                                 <delegatePattern>true</delegatePattern>
                                 <useJakartaEe>true</useJakartaEe>
+                                <dateLibrary>java8</dateLibrary>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -204,6 +209,7 @@
                             <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
+                                <dateLibrary>java8</dateLibrary>
                             </configOptions>
                         </configuration>
                     </execution>
