@@ -14,7 +14,7 @@ public class HistoryApiImpl implements HistoryApiDelegate {
   private final HistoryService historyService;
 
   @Override
-  public ResponseEntity<List<CallHistory>> historyGet(Integer page, Integer size) {
+  public ResponseEntity<List<CallHistory>> getHistory(Integer page, Integer size) {
     return ResponseEntity.ok(historyService.getCallHistory(page, size));
   }
 }

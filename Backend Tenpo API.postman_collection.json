@@ -1,0 +1,328 @@
+{
+	"info": {
+		"_postman_id": "4cfeb2ee-a0c5-4c27-8d99-32a14c36617c",
+		"name": "Backend Tenpo API",
+		"description": "API para realizar cálculos con un porcentaje dinámico y consultar el historial de llamadas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31816792",
+		"_collection_link": "https://restless-zodiac-103864.postman.co/workspace/New-Team-Workspace~563c43ce-8c37-47e5-aae7-6bbc244ebf16/collection/31816792-4cfeb2ee-a0c5-4c27-8d99-32a14c36617c?action=share&source=collection_link&creator=31816792"
+	},
+	"item": [
+		{
+			"name": "calculate",
+			"item": [
+				{
+					"name": "Calcula un valor con porcentaje dinámico",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"num1\": \"<string>\",\n  \"num2\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/calculate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"calculate"
+							]
+						},
+						"description": "Recibe dos números, los suma y aplica un porcentaje adicional obtenido de un servicio externo."
+					},
+					"response": [
+						{
+							"name": "Cálculo exitoso",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"num1\": \"<string>\",\n  \"num2\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/calculate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"calculate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"result\": \"<string>\",\n  \"percentage\": \"<string>\"\n}"
+						},
+						{
+							"name": "Solicitud inválida (parámetros faltantes o incorrectos)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"num1\": \"<string>\",\n  \"num2\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/calculate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"calculate"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"reason\": \"<string>\",\n  \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "Servicio externo no disponible",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"num1\": \"<string>\",\n  \"num2\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/calculate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"calculate"
+									]
+								}
+							},
+							"status": "Service Unavailable",
+							"code": 503,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"reason\": \"<string>\",\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "history",
+			"item": [
+				{
+					"name": "Consulta el historial de llamadas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/history?page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"history"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Número de página (empezando desde 0)"
+								},
+								{
+									"key": "size",
+									"value": "10",
+									"description": "Cantidad de registros por página"
+								}
+							]
+						},
+						"description": "Retorna un listado paginado del historial de llamadas a los endpoints de la API."
+					},
+					"response": [
+						{
+							"name": "Historial obtenido con éxito",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/history?page=0&size=10",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"history"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"description": "Número de página (empezando desde 0)"
+										},
+										{
+											"key": "size",
+											"value": "10",
+											"description": "Cantidad de registros por página"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"timestamp\": \"<string>\",\n    \"endpoint\": \"<string>\",\n    \"requestParams\": \"<string>\",\n    \"responseData\": \"<string>\",\n    \"status\": \"<integer>\"\n  },\n  {\n    \"timestamp\": \"<string>\",\n    \"endpoint\": \"<string>\",\n    \"requestParams\": \"<string>\",\n    \"responseData\": \"<string>\",\n    \"status\": \"<integer>\"\n  }\n]"
+						},
+						{
+							"name": "Límite de peticiones excedido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/history?page=0&size=10",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"history"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"description": "Número de página (empezando desde 0)"
+										},
+										{
+											"key": "size",
+											"value": "10",
+											"description": "Cantidad de registros por página"
+										}
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"reason\": \"<string>\",\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api"
+		}
+	]
+}

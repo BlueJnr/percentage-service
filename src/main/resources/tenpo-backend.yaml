@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Backend Tenpo API
-  description: API para cálculo con porcentaje dinámico y consulta de historial.
+  description: API para realizar cálculos con un porcentaje dinámico y consultar el historial de llamadas.
   version: "1.0.0"
 
 servers:
@@ -12,13 +12,17 @@ paths:
   /calculate:
     post:
       summary: Calcula un valor con porcentaje dinámico
-      description: Suma dos números y aplica un porcentaje obtenido de un servicio externo.
+      description: Recibe dos números, los suma y aplica un porcentaje adicional obtenido de un servicio externo.
+      operationId: calculateValue
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CalculationRequest'
+            example:
+              num1: "5.00"
+              num2: "10.00"
       responses:
         '200':
           description: Cálculo exitoso
@@ -26,8 +30,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalculationResponse'
+              example:
+                result: "16.50"
+                percentage: "10.00"
+        '400':
+          description: Solicitud inválida (parámetros faltantes o incorrectos)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                reason: "BAD_REQUEST"
+                message: "Missing or invalid parameters"
         '503':
-          description: Error interno del servidor
+          description: Servicio externo no disponible
           content:
             application/json:
               schema:
@@ -39,27 +55,48 @@ paths:
   /history:
     get:
       summary: Consulta el historial de llamadas
-      description: Retorna un listado paginado del historial de llamadas.
+      description: Retorna un listado paginado del historial de llamadas a los endpoints de la API.
+      operationId: getHistory
       parameters:
         - name: page
           in: query
+          description: Número de página (empezando desde 0)
+          required: false
           schema:
             type: integer
             default: 0
+            minimum: 0
+          example: 1
         - name: size
           in: query
+          description: Cantidad de registros por página
+          required: false
           schema:
             type: integer
             default: 10
+            minimum: 1
+            maximum: 100
+          example: 10
       responses:
         '200':
-          description: Historial obtenido
+          description: Historial obtenido con éxito
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/CallHistory'
+              example:
+                - timestamp: "2025-03-02T14:00:12"
+                  endpoint: "/api/calculate"
+                  requestParams: "{ \"num1\": \"5.00\", \"num2\": \"10.00\" }"
+                  responseData: "{ \"result\": \"16.50\", \"percentage\": \"10.00\" }"
+                  status: 200
+                - timestamp: "2025-03-02T14:05:23"
+                  endpoint: "/api/calculate"
+                  requestParams: "{ \"num1\": \"3.00\", \"num2\": \"7.00\" }"
+                  responseData: "Error: Service unavailable"
+                  status: 503
         '429':
           description: Límite de peticiones excedido
           content:
@@ -74,50 +111,68 @@ components:
   schemas:
     CalculationRequest:
       type: object
+      description: Parámetros de entrada para el cálculo.
       properties:
         num1:
           type: string
           format: decimal
+          description: Primer número a sumar
           example: "5.00"
         num2:
           type: string
           format: decimal
+          description: Segundo número a sumar
           example: "10.00"
 
     CalculationResponse:
       type: object
+      description: Respuesta con el resultado del cálculo
       properties:
         result:
           type: string
           format: decimal
+          description: Resultado final después de aplicar el porcentaje
+          example: "16.50"
         percentage:
           type: string
           format: decimal
+          description: Porcentaje aplicado al cálculo
+          example: "10.00"
 
     CallHistory:
       type: object
+      description: Registro del historial de llamadas a la API.
       properties:
         timestamp:
           type: string
           format: local-date-time
+          description: Fecha y hora exacta de la llamada
           example: "2025-03-02T14:00:12"
         endpoint:
           type: string
+          description: Endpoint que fue llamado
           example: "/api/calculate"
         requestParams:
           type: string
+          description: Parámetros recibidos en la solicitud
         responseData:
           type: string
+          description: Respuesta enviada por la API
         status:
           type: integer
           format: int32
+          description: Código de estado HTTP de la respuesta
+          example: 200
 
     ErrorResponse:
       type: object
+      description: Estructura de error estándar
       properties:
         reason:
           type: string
+          description: Código de error que identifica el problema
           example: "TOO_MANY_REQUESTS"
         message:
           type: string
+          description: Mensaje descriptivo del error
           example: "Rate limit exceeded. Try again later."

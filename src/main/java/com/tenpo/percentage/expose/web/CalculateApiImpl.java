@@ -15,7 +15,7 @@ public class CalculateApiImpl implements CalculateApiDelegate {
   private final CalculateService calculateService;
 
   @Override
-  public ResponseEntity<CalculationResponse> calculatePost(CalculationRequest calculationRequest) {
+  public ResponseEntity<CalculationResponse> calculateValue(CalculationRequest calculationRequest) {
     return ResponseEntity.ok(calculateService.apply(calculationRequest));
   }
 }
