@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: percentage
+  datasource:
+    url: jdbc:tc:postgresql:16.3:///${DB_NAME:percentage}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      leak-detection-threshold: 2000
+      connection-test-query: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          batch_size: 50
+  data:
+    redis:
+      database: 0
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ''
+      timeout: 60000
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  defaults:
+    metrics:
+      export:
+        enabled: false
+
+logging:
+  level:
+    root: INFO
+    io.github.resilience4j: DEBUG
+
+
+resilience4j:
+  retry:
+    instances:
+      percentageServiceRetry:
+        maxAttempts: 3
+        waitDuration: 500ms
+        retryExceptions:
+          - org.springframework.web.client.RestClientException
+          - org.springframework.web.client.ResourceAccessException
+          - java.net.ConnectException
+          - java.io.IOException
+
+  ratelimiter:
+    instances:
+      historyServiceRateLimiter:
+        limitForPeriod: 3
+        limitRefreshPeriod: 1m
+        timeoutDuration: 0

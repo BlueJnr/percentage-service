@@ -3,23 +3,17 @@ package com.tenpo.percentage;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
-import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
 class TestcontainersConfiguration {
 
-	@Bean
-	@ServiceConnection
-	PostgreSQLContainer<?> postgresContainer() {
-		return new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.3-alpine"));
-	}
-
-	@Bean
-	@ServiceConnection(name = "redis")
-	GenericContainer<?> redisContainer() {
-		return new GenericContainer<>(DockerImageName.parse("redis:7.4")).withExposedPorts(6379);
-	}
-
+  @Bean
+  @ServiceConnection
+  PostgreSQLContainer<?> postgresContainer() {
+    return new PostgreSQLContainer<>("postgres:16.3-alpine")
+        .withDatabaseName("percentage")
+        .withUsername("postgres")
+        .withPassword("postgres");
+  }
 }
