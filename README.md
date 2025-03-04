@@ -85,7 +85,7 @@ curl -X POST "http://localhost:8080/api/calculate" -H "Content-Type: application
 ✔️ **Respuesta HTTP 429** si se excede el límite.
 
 ### 🔹 **Documentación**
-✔️ **Swagger & OpenAPI** → API-First Development.  
+✔️ **Swagger & OpenAPI** → API-First Development ([tenpo-backend.yaml](src/main/resources/tenpo-backend.yaml)).  
 ✔️ **Postman Collection** → Pruebas rápidas sin configurar manualmente.
 
 ---
@@ -114,6 +114,3 @@ docker-compose up --build --force-recreate
 👤 **[BlueJnr](https://github.com/BlueJnr)**  
 💡 **Tecnologías: Java | Spring Boot | AWS | Kubernetes | CI/CD**  
 🚀 **Proyecto mantenido en GitHub → [percentage-service](https://github.com/BlueJnr/percentage-service)**
-
----
-```
